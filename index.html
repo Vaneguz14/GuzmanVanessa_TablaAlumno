@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css"/>
+    <script src="comprovaDNI.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <style>
+        body { background-color: rgb(232, 240, 250);
+            font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif 
+        };
+    </style>
+    <title>ALUMNOS</title>
+</head>
+<body>
+    <br><h1 class= "text-center">Alumnos Matriculados</h1><br><br>
+    <div class="container">
+        <fieldset>
+            <legend>Información del Alumno:</legend>
+            <form action="/action_page.php" id="formulario"> <!-- formulario para poder insertar los datos de los alumnos que se quieran agregar o borrar-->
+                <div class="form-group">
+                    <label for="dni">DNI:</label>
+                    <input type="text" class="form-control" id="dni" required>
+                </div>
+                <div class="form-group">
+                    <label for="nombre">Nombre:</label>
+                    <input type="text" class="form-control" id="nombre"   required>
+                </div>
+                <div class="form-group">
+                    <label for="apellidos">Apellidos:</label>
+                    <input type="text" class="form-control" id="apellidos"  required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" class="form-control" id="email">
+                </div>
+                <div class="form-group">
+                    <label for="nota">Nota:</label>
+                    <input type="Number" class="form-control" min="0" max="10" id="nota"  required>
+                </div> 
+                
+                <div class="form-group">
+                    <button type="submit" class="btn btn-success" id="AnyadirAlumno">Añadir Alumno</button>
+                </div>
+                
+            </form>
+        </fieldset><br><br>
+        <h2 class="text-center">LISTADO DE ALUMNOS</h2>
+        <table class="table table-hover" id="Alumnos"> <!-- tabla que contendrá los alumnos insertados-->
+            <thead>
+                <tr>
+                    <th>DNI</th>
+                    <th>Nombre</th>
+                    <th>Apellidos</th>
+                    <th>Email</th>
+                    <th>Nota</th>
+                    <th></th> <!-- sirve para añadir el boton borrar-->
+                </tr>
+            </thead>
+            <tbody id="AlumnoNuevo"> <!-- en este lugar irán las filas insertadas mediante jquery-->
+                
+            </tbody>
+        </table>
+        
+        <script>
+            $(document).ready(function(){
+                
+                $("#formulario").submit(function(evento){
+                    
+                    if(comprovaDNI($("#dni").val())){ // Con esto filtramos que la fila que se quiere añadir tiene un DNI correcto
+                        
+                        var nuevoAlumno = $('<tr><td>'+$('#dni').val()+'</td><td>'+$("#nombre").val()+
+                            '</td><td>'+$("#apellidos").val()+'</td><td>'+$("#email").val()+'</td><td>'+
+                                $('#nota').val()+'</td><td><button class="btn btn-danger" id="borrar">Borrar Alumno</button></td></tr>');
+                            
+                            nuevoAlumno.appendTo("#AlumnoNuevo");
+                            alert("El alumno ha sido añadido");
+                            
+                            $("#formulario")[0].reset(); //de esta forma, el formulario queda vacío para introducir nuevos datos
+                        }
+                        else{
+                            alert("El DNI que has introducido no es válido. Verifique que lo has insertado correctamente");
+                        }
+                        return false;
+                    });
+                    
+                    $("#Alumnos").on('click', '#borrar', function(){
+                        $(this).closest('tr').remove();
+                    });
+                });  
+            </script>
+        </div>
+    </body>
+    </html>
